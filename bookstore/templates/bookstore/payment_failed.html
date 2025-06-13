@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Payment Failed - BookStore{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-times-circle"></i> Payment Failed
+                    </h4>
+                </div>
+                <div class="card-body text-center">
+                    <div class="mb-4">
+                        <i class="fas fa-times-circle text-danger" style="font-size: 5rem;"></i>
+                    </div>
+                    
+                    <h3 class="mb-3">Oops! Something went wrong.</h3>
+                    <p class="lead mb-4">Your payment of <strong>{{ order.total_amount }}</strong> could not be processed.</p>
+                    
+                    <div class="alert alert-danger mb-4">
+                        <p class="mb-0"><strong>Error:</strong> {{ error_message }}</p>
+                    </div>
+                    
+                    <p class="mb-4">Please try again or choose a different payment method.</p>
+                    
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="{% url 'bookstore:payment' order.id %}" class="btn btn-primary">
+                            <i class="fas fa-redo"></i> Try Again
+                        </a>
+                        <a href="{% url 'bookstore:order_detail' order.id %}" class="btn btn-outline-primary">
+                            <i class="fas fa-file-alt"></i> View Order
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

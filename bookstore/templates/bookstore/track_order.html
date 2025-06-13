@@ -1,0 +1,315 @@
+{% extends 'base.html' %}
+
+{% block title %}Track Order #{{ order.id }} - BookStore{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">
+                        <i class="fas fa-truck"></i> Track Order #{{ order.id }}
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h6>Order Details</h6>
+                            <p><strong>Order ID:</strong> #{{ order.id }}</p>
+                            <p><strong>Date:</strong> {{ order.created_at|date:"F d, Y" }}</p>
+                            <p><strong>Total Amount:</strong> ₹{{ order.total_amount }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Shipping Address</h6>
+                            <p>{{ order.shipping_address }}</p>
+                        </div>
+                    </div>
+                    
+                    <h6>Order Status</h6>
+                    <div class="order-timeline mb-4">
+                        <div class="timeline-track">
+                            {% if order.status == 'pending' %}
+                                <div class="timeline-step active">
+                                    <div class="timeline-icon">
+                                        <i class="fas fa-clipboard-check"></i>
+                                    </div>
+                                    <div class="timeline-text">
+                                        <h6>Order Placed</h6>
+                                        <p>{{ order.created_at|date:"F d, Y" }}</p>
+                                    </div>
+                                </div>
+                                <div class="timeline-step">
+                                    <div class="timeline-icon">
+                                        <i class="fas fa-box"></i>
+                                    </div>
+                                    <div class="timeline-text">
+                                        <h6>Processing</h6>
+                                        <p>Pending</p>
+                                    </div>
+                                </div>
+                                <div class="timeline-step">
+                                    <div class="timeline-icon">
+                                        <i class="fas fa-shipping-fast"></i>
+                                    </div>
+                                    <div class="timeline-text">
+                                        <h6>Shipped</h6>
+                                        <p>Pending</p>
+                                    </div>
+                                </div>
+                                <div class="timeline-step">
+                                    <div class="timeline-icon">
+                                        <i class="fas fa-home"></i>
+                                    </div>
+                                    <div class="timeline-text">
+                                        <h6>Delivered</h6>
+                                        <p>Pending</p>
+                                    </div>
+                                </div>
+                            {% elif order.status == 'confirmed' %}
+                                <div class="timeline-step completed">
+                                    <div class="timeline-icon">
+                                        <i class="fas fa-clipboard-check"></i>
+                                    </div>
+                                    <div class="timeline-text">
+                                        <h6>Order Placed</h6>
+                                        <p>{{ order.created_at|date:"F d, Y" }}</p>
+                                    </div>
+                                </div>
+                                <div class="timeline-step active">
+                                    <div class="timeline-icon">
+                                        <i class="fas fa-box"></i>
+                                    </div>
+                                    <div class="timeline-text">
+                                        <h6>Processing</h6>
+                                        <p>{{ order.updated_at|date:"F d, Y" }}</p>
+                                    </div>
+                                </div>
+                                <div class="timeline-step">
+                                    <div class="timeline-icon">
+                                        <i class="fas fa-shipping-fast"></i>
+                                    </div>
+                                    <div class="timeline-text">
+                                        <h6>Shipped</h6>
+                                        <p>Pending</p>
+                                    </div>
+                                </div>
+                                <div class="timeline-step">
+                                    <div class="timeline-icon">
+                                        <i class="fas fa-home"></i>
+                                    </div>
+                                    <div class="timeline-text">
+                                        <h6>Delivered</h6>
+                                        <p>Pending</p>
+                                    </div>
+                                </div>
+                            {% elif order.status == 'shipped' %}
+                                <div class="timeline-step completed">
+                                    <div class="timeline-icon">
+                                        <i class="fas fa-clipboard-check"></i>
+                                    </div>
+                                    <div class="timeline-text">
+                                        <h6>Order Placed</h6>
+                                        <p>{{ order.created_at|date:"F d, Y" }}</p>
+                                    </div>
+                                </div>
+                                <div class="timeline-step completed">
+                                    <div class="timeline-icon">
+                                        <i class="fas fa-box"></i>
+                                    </div>
+                                    <div class="timeline-text">
+                                        <h6>Processing</h6>
+                                        <p>Completed</p>
+                                    </div>
+                                </div>
+                                <div class="timeline-step active">
+                                    <div class="timeline-icon">
+                                        <i class="fas fa-shipping-fast"></i>
+                                    </div>
+                                    <div class="timeline-text">
+                                        <h6>Shipped</h6>
+                                        <p>{{ order.updated_at|date:"F d, Y" }}</p>
+                                    </div>
+                                </div>
+                                <div class="timeline-step">
+                                    <div class="timeline-icon">
+                                        <i class="fas fa-home"></i>
+                                    </div>
+                                    <div class="timeline-text">
+                                        <h6>Delivered</h6>
+                                        <p>Pending</p>
+                                    </div>
+                                </div>
+                            {% elif order.status == 'delivered' %}
+                                <div class="timeline-step completed">
+                                    <div class="timeline-icon">
+                                        <i class="fas fa-clipboard-check"></i>
+                                    </div>
+                                    <div class="timeline-text">
+                                        <h6>Order Placed</h6>
+                                        <p>{{ order.created_at|date:"F d, Y" }}</p>
+                                    </div>
+                                </div>
+                                <div class="timeline-step completed">
+                                    <div class="timeline-icon">
+                                        <i class="fas fa-box"></i>
+                                    </div>
+                                    <div class="timeline-text">
+                                        <h6>Processing</h6>
+                                        <p>Completed</p>
+                                    </div>
+                                </div>
+                                <div class="timeline-step completed">
+                                    <div class="timeline-icon">
+                                        <i class="fas fa-shipping-fast"></i>
+                                    </div>
+                                    <div class="timeline-text">
+                                        <h6>Shipped</h6>
+                                        <p>Completed</p>
+                                    </div>
+                                </div>
+                                <div class="timeline-step active">
+                                    <div class="timeline-icon">
+                                        <i class="fas fa-home"></i>
+                                    </div>
+                                    <div class="timeline-text">
+                                        <h6>Delivered</h6>
+                                        <p>{{ order.updated_at|date:"F d, Y" }}</p>
+                                    </div>
+                                </div>
+                            {% elif order.status == 'cancelled' %}
+                                <div class="timeline-step completed">
+                                    <div class="timeline-icon">
+                                        <i class="fas fa-clipboard-check"></i>
+                                    </div>
+                                    <div class="timeline-text">
+                                        <h6>Order Placed</h6>
+                                        <p>{{ order.created_at|date:"F d, Y" }}</p>
+                                    </div>
+                                </div>
+                                <div class="timeline-step cancelled">
+                                    <div class="timeline-icon">
+                                        <i class="fas fa-times"></i>
+                                    </div>
+                                    <div class="timeline-text">
+                                        <h6>Cancelled</h6>
+                                        <p>{{ order.updated_at|date:"F d, Y" }}</p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <h6>Order Items</h6>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Book</th>
+                                    <th>Author</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in order.items.all %}
+                                <tr>
+                                    <td>{{ item.book.title }}</td>
+                                    <td>{{ item.book.author }}</td>
+                                    <td>₹{{ item.price }}</td>
+                                    <td>{{ item.quantity }}</td>
+                                    <td>₹{{ item.total_price }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="4">Total Amount:</th>
+                                    <th>₹{{ order.total_amount }}</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <a href="{% url 'bookstore:order_history' %}" class="btn btn-outline-primary">
+                            <i class="fas fa-arrow-left"></i> Back to Orders
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .order-timeline {
+        margin: 30px 0;
+    }
+    
+    .timeline-track {
+        display: flex;
+        justify-content: space-between;
+        position: relative;
+        margin-bottom: 30px;
+    }
+    
+    .timeline-track:before {
+        content: '';
+        position: absolute;
+        top: 20px;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: #e9ecef;
+        z-index: 1;
+    }
+    
+    .timeline-step {
+        position: relative;
+        z-index: 2;
+        flex: 1;
+        text-align: center;
+        padding: 0 10px;
+    }
+    
+    .timeline-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #e9ecef;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 10px;
+        color: #6c757d;
+    }
+    
+    .timeline-step.active .timeline-icon {
+        background: #4361ee;
+        color: white;
+    }
+    
+    .timeline-step.completed .timeline-icon {
+        background: #28a745;
+        color: white;
+    }
+    
+    .timeline-step.cancelled .timeline-icon {
+        background: #dc3545;
+        color: white;
+    }
+    
+    .timeline-text h6 {
+        margin-bottom: 5px;
+        font-size: 14px;
+    }
+    
+    .timeline-text p {
+        margin: 0;
+        font-size: 12px;
+        color: #6c757d;
+    }
+</style>
+{% endblock %}

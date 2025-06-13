@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}Payment Successful - BookStore{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-check-circle"></i> Payment Successful!
+                    </h4>
+                </div>
+                <div class="card-body text-center">
+                    <div class="mb-4">
+                        <i class="fas fa-check-circle text-success" style="font-size: 5rem;"></i>
+                    </div>
+                    
+                    <h3 class="mb-3">Thank You for Your Purchase!</h3>
+                    <p class="lead mb-4">Your payment of <strong>₹{{ payment.amount }}</strong> has been successfully processed.</p>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-6 mx-auto">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <p><strong>Order ID:</strong> #{{ payment.order.id }}</p>
+                                    <p><strong>Transaction ID:</strong> {{ payment.transaction_id }}</p>
+                                    <p><strong>Payment Method:</strong> {{ payment.get_payment_method_display }}</p>
+                                    <p><strong>Date:</strong> {{ payment.created_at|date:"F d, Y H:i" }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p class="mb-4">A confirmation email has been sent to <strong>{{ payment.order.user.email }}</strong>.</p>
+                    
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="{% url 'bookstore:order_detail' payment.order.id %}" class="btn btn-primary">
+                            <i class="fas fa-file-alt"></i> View Order Details
+                        </a>
+                        <a href="{% url 'bookstore:home' %}" class="btn btn-outline-primary">
+                            <i class="fas fa-home"></i> Continue Shopping
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

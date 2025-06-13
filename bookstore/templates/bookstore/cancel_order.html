@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}Cancel Order #{{ order.id }} - BookStore{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h4 class="mb-0">
+                        <i class="fas fa-exclamation-triangle"></i> Cancel Order #{{ order.id }}
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <h5><i class="fas fa-info-circle"></i> Are you sure you want to cancel this order?</h5>
+                        <p class="mb-0">This action cannot be undone. If you have already paid for this order, a refund will be processed.</p>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h6>Order Details</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Order ID:</strong> #{{ order.id }}</p>
+                                <p><strong>Order Date:</strong> {{ order.created_at|date:"F d, Y H:i" }}</p>
+                                <p><strong>Status:</strong> 
+                                    <span class="badge bg-primary">{{ order.get_status_display }}</span>
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Total Amount:</strong> ₹{{ order.total_amount }}</p>
+                                <p><strong>Items:</strong> {{ order.items.count }}</p>
+                                <p><strong>Time Since Order:</strong> {{ order.time_since_order }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h6>Items in this Order</h6>
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Book</th>
+                                        <th>Quantity</th>
+                                        <th>Price</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in order.items.all %}
+                                    <tr>
+                                        <td>{{ item.book.title }}</td>
+                                        <td>{{ item.quantity }}</td>
+                                        <td>₹{{ item.price }}</td>
+                                        <td>₹{{ item.total_price }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <h6><i class="fas fa-undo"></i> What happens when you cancel?</h6>
+                        <ul class="mb-0">
+                            <li>Your order will be marked as cancelled</li>
+                            <li>Book stock will be restored</li>
+                            <li>If payment was completed, refund will be processed within 5-7 business days</li>
+                            <li>You will receive a confirmation email</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mt-4">
+                        <a href="{% url 'bookstore:order_detail' order.id %}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Go Back
+                        </a>
+                        
+                        <form method="post" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you absolutely sure you want to cancel this order?')">
+                                <i class="fas fa-times"></i> Yes, Cancel Order
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

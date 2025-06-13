@@ -1,0 +1,233 @@
+{% extends 'base.html' %}
+
+{% block title %}Payment - BookStore{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">
+                        <i class="fas fa-credit-card"></i> Complete Your Payment
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <h5>Order Summary</h5>
+                        <p><strong>Order ID:</strong> #{{ order.id }}</p>
+                        <p><strong>Subtotal:</strong> ₹{{ order.subtotal }}</p>
+                        <p><strong>Shipping:</strong> 
+                            {% if order.shipping_cost == 0 %}
+                                <span class="text-success">FREE</span>
+                            {% else %}
+                                ₹{{ order.shipping_cost }}
+                            {% endif %}
+                        </p>
+                        <p><strong>Total Amount:</strong> <span class="h5 text-primary">₹{{ order.total_amount }}</span></p>
+                    </div>
+                    
+                    <form method="post" id="payment-form">
+                        {% csrf_token %}
+                        
+                        <div class="mb-4">
+                            <h5>Select Payment Method</h5>
+                            <div class="payment-methods">
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="radio" name="payment_method" id="credit-card" value="credit_card" checked>
+                                    <label class="form-check-label" for="credit-card">
+                                        <i class="fas fa-credit-card text-primary"></i> Credit/Debit Card
+                                    </label>
+                                </div>
+                                
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="radio" name="payment_method" id="upi" value="upi">
+                                    <label class="form-check-label" for="upi">
+                                        <i class="fas fa-mobile-alt text-success"></i> UPI
+                                    </label>
+                                </div>
+                                
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="radio" name="payment_method" id="net-banking" value="net_banking">
+                                    <label class="form-check-label" for="net-banking">
+                                        <i class="fas fa-university text-info"></i> Net Banking
+                                    </label>
+                                </div>
+                                
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="radio" name="payment_method" id="wallet" value="wallet">
+                                    <label class="form-check-label" for="wallet">
+                                        <i class="fas fa-wallet text-warning"></i> Digital Wallet
+                                    </label>
+                                </div>
+                                
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="radio" name="payment_method" id="cod" value="cod">
+                                    <label class="form-check-label" for="cod">
+                                        <i class="fas fa-money-bill text-secondary"></i> Cash on Delivery
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Credit Card Form -->
+                        <div id="credit-card-form" class="payment-form">
+                            <h6>Card Details</h6>
+                            <div class="mb-3">
+                                <label for="card-number" class="form-label">Card Number</label>
+                                <input type="text" class="form-control" id="card-number" name="card_number" placeholder="1234 5678 9012 3456" maxlength="19">
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="expiry-date" class="form-label">Expiry Date</label>
+                                    <input type="text" class="form-control" id="expiry-date" name="expiry_date" placeholder="MM/YY" maxlength="5">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="cvv" class="form-label">CVV</label>
+                                    <input type="text" class="form-control" id="cvv" name="cvv" placeholder="123" maxlength="4">
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="card-name" class="form-label">Cardholder Name</label>
+                                <input type="text" class="form-control" id="card-name" name="card_name" placeholder="Name on Card">
+                            </div>
+                        </div>
+                        
+                        <!-- UPI Form -->
+                        <div id="upi-form" class="payment-form" style="display: none;">
+                            <h6>UPI Details</h6>
+                            <div class="mb-3">
+                                <label for="upi-id" class="form-label">UPI ID</label>
+                                <input type="text" class="form-control" id="upi-id" name="upi_id" placeholder="yourname@paytm">
+                                <div class="form-text">Enter your UPI ID (e.g., yourname@paytm, yourname@okicici)</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Net Banking Form -->
+                        <div id="net-banking-form" class="payment-form" style="display: none;">
+                            <h6>Select Your Bank</h6>
+                            <div class="mb-3">
+                                <select class="form-control" name="bank">
+                                    <option value="">Choose your bank</option>
+                                    <option value="sbi">State Bank of India</option>
+                                    <option value="hdfc">HDFC Bank</option>
+                                    <option value="icici">ICICI Bank</option>
+                                    <option value="axis">Axis Bank</option>
+                                    <option value="kotak">Kotak Mahindra Bank</option>
+                                    <option value="pnb">Punjab National Bank</option>
+                                    <option value="bob">Bank of Baroda</option>
+                                    <option value="canara">Canara Bank</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- Wallet Form -->
+                        <div id="wallet-form" class="payment-form" style="display: none;">
+                            <h6>Select Wallet</h6>
+                            <div class="mb-3">
+                                <select class="form-control" name="wallet">
+                                    <option value="">Choose your wallet</option>
+                                    <option value="paytm">Paytm</option>
+                                    <option value="phonepe">PhonePe</option>
+                                    <option value="googlepay">Google Pay</option>
+                                    <option value="amazonpay">Amazon Pay</option>
+                                    <option value="mobikwik">MobiKwik</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- COD Form -->
+                        <div id="cod-form" class="payment-form" style="display: none;">
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle"></i> You will pay ₹{{ order.total_amount }} when your order is delivered.
+                                <br><small>Cash on Delivery charges may apply for orders below ₹999.</small>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-success btn-lg" id="pay-button">
+                                <i class="fas fa-lock"></i> Pay ₹{{ order.total_amount }}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const paymentMethods = document.querySelectorAll('input[name="payment_method"]');
+        const creditCardForm = document.getElementById('credit-card-form');
+        const upiForm = document.getElementById('upi-form');
+        const netBankingForm = document.getElementById('net-banking-form');
+        const walletForm = document.getElementById('wallet-form');
+        const codForm = document.getElementById('cod-form');
+        const payButton = document.getElementById('pay-button');
+        
+        function showSelectedForm() {
+            const selectedMethod = document.querySelector('input[name="payment_method"]:checked').value;
+            
+            // Hide all forms
+            creditCardForm.style.display = 'none';
+            upiForm.style.display = 'none';
+            netBankingForm.style.display = 'none';
+            walletForm.style.display = 'none';
+            codForm.style.display = 'none';
+            
+            // Show selected form and update button text
+            if (selectedMethod === 'credit_card') {
+                creditCardForm.style.display = 'block';
+                payButton.innerHTML = '<i class="fas fa-lock"></i> Pay ₹{{ order.total_amount }}';
+            } else if (selectedMethod === 'upi') {
+                upiForm.style.display = 'block';
+                payButton.innerHTML = '<i class="fas fa-lock"></i> Pay ₹{{ order.total_amount }}';
+            } else if (selectedMethod === 'net_banking') {
+                netBankingForm.style.display = 'block';
+                payButton.innerHTML = '<i class="fas fa-lock"></i> Pay ₹{{ order.total_amount }}';
+            } else if (selectedMethod === 'wallet') {
+                walletForm.style.display = 'block';
+                payButton.innerHTML = '<i class="fas fa-lock"></i> Pay ₹{{ order.total_amount }}';
+            } else if (selectedMethod === 'cod') {
+                codForm.style.display = 'block';
+                payButton.innerHTML = '<i class="fas fa-check"></i> Place Order';
+            }
+        }
+        
+        // Add event listeners
+        paymentMethods.forEach(method => {
+            method.addEventListener('change', showSelectedForm);
+        });
+        
+        // Format credit card number
+        const cardNumberInput = document.getElementById('card-number');
+        if (cardNumberInput) {
+            cardNumberInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\s+/g, '');
+                if (value.length > 0) {
+                    value = value.match(new RegExp('.{1,4}', 'g')).join(' ');
+                }
+                e.target.value = value;
+            });
+        }
+        
+        // Format expiry date
+        const expiryDateInput = document.getElementById('expiry-date');
+        if (expiryDateInput) {
+            expiryDateInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length > 2) {
+                    value = value.substring(0, 2) + '/' + value.substring(2, 4);
+                }
+                e.target.value = value;
+            });
+        }
+        
+        // Show initial form
+        showSelectedForm();
+    });
+</script>
+{% endblock %}
